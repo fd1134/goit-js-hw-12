@@ -14,27 +14,30 @@ const form = document.querySelector("#search-form");
 const loader = document.querySelector("#loader");
 const galleryList = document.querySelector(".gallery-list");
 const API_KEY = "48271120-e478f6712aa82518e8481b3a8";
+const url = 'https://pixabay.com/api/';
+let params = {
+  key: '48271120-e478f6712aa82518e8481b3a8',
+  image_type: 'photo',
+  orientation: 'horizontal',
+  safesearch: true,
+};
+const fetchPixabay = async (url,params) => {  
+  const response = await axios.get(url, {params});
+  return response.data;
+}
 
-form.addEventListener("submit", (evt) => {
+form.addEventListener("submit", async (evt) => {
   evt.preventDefault();
   loader.classList.add("loader"); 
- axios
-   .get('https://pixabay.com/api/', {
-     params: {
-       key: '48271120-e478f6712aa82518e8481b3a8',
-       q: evt.currentTarget.elements.query.value.trim(),
-       image_type: 'photo',
-       orientation: 'horizontal',
-       safesearch: true,
-     },
-   })
-   .then(response => {
-     if (response.data.hits.length <= 0) {
+  params.q = evt.currentTarget.elements.query.value.trim();
+  fetchPixabay(url, params)
+  .then(data => {
+     if (data.hits.length <= 0) {
        throw new Error(
          'Sorry, there are no images matching your search query. Please try again!'
        );
      }
-     const galleryMarkup = response.data.hits
+     const galleryMarkup = data.hits
        .map(
          ({
            webformatURL,
