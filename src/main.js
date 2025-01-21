@@ -9,6 +9,7 @@ import SimpleLightbox from 'simplelightbox';
 // Ek stillerin eklenmesi
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import axios from 'axios';
+
 axios.defaults.baseURL = 'https://pixabay.com/api';
  let simplo = new SimpleLightbox('.gallery-list a', {
    captionsData: 'alt',
@@ -27,7 +28,7 @@ let params = {
   orientation: 'horizontal',
   safesearch: true,
   page: 1,
-  per_page:200
+  per_page:20
 };
 btnLoadMore.classList.add('pasif');
 form.addEventListener('submit', async evt => {
@@ -83,7 +84,7 @@ btnLoadMore.addEventListener("click",async () => {
         );
       }
     
-   
+   window.scrollBy(0, 2 * cardHeight());
     
   } catch (error) {
     iziToast.info({
@@ -91,6 +92,7 @@ btnLoadMore.addEventListener("click",async () => {
       message: `${error}`,
     });
   }
+  
   
 });
 const fetchPixabay = async params => {
@@ -138,4 +140,11 @@ const markup = data => {
       }
     )
     .join('');
+};
+
+const cardHeight = () => {
+  let elem = document.querySelector('.card');
+  let rect = elem.getBoundingClientRect();
+  let height = rect.height;
+  return height;
 };
