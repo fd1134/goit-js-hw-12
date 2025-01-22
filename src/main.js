@@ -9,7 +9,7 @@ import SimpleLightbox from 'simplelightbox';
 // Ek stillerin eklenmesi
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import axios from 'axios';
-require('dotenv').config();
+
 
 
 axios.defaults.baseURL = 'https://pixabay.com/api';
@@ -22,9 +22,10 @@ const form = document.querySelector('#search-form');
 const loader = document.querySelector('#loader');
 const btnLoadMore = document.querySelector('#load-more');
 const galleryList = document.querySelector('.gallery-list');
+const API_KEY = '48271120-e478f6712aa82518e8481b3a8';
 let totalPage = 0;
 let params = {
-  key: process.env.API_KEY,
+  key:API_KEY,
   image_type: 'photo',
   orientation: 'horizontal',
   safesearch: true,
@@ -149,8 +150,7 @@ const markup = data => {
 };
 
 const cardHeight = () => {
-  let elem = document.querySelector('.card');
-  let rect = elem.getBoundingClientRect();
-  let height = rect.height;
-  return height;
+  const elem = document.querySelector('.card');
+  if (!elem) return 0;
+  return elem.getBoundingClientRect().height;
 };
