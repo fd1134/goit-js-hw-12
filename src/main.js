@@ -9,6 +9,8 @@ import SimpleLightbox from 'simplelightbox';
 // Ek stillerin eklenmesi
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import axios from 'axios';
+require('dotenv').config();
+
 
 axios.defaults.baseURL = 'https://pixabay.com/api';
  let simplo = new SimpleLightbox('.gallery-list a', {
@@ -20,10 +22,9 @@ const form = document.querySelector('#search-form');
 const loader = document.querySelector('#loader');
 const btnLoadMore = document.querySelector('#load-more');
 const galleryList = document.querySelector('.gallery-list');
-const API_KEY = '48271120-e478f6712aa82518e8481b3a8';
 let totalPage = 0;
 let params = {
-  key: '48271120-e478f6712aa82518e8481b3a8',
+  key: process.env.API_KEY,
   image_type: 'photo',
   orientation: 'horizontal',
   safesearch: true,
@@ -78,13 +79,18 @@ btnLoadMore.addEventListener("click",async () => {
     simplo.refresh();
     params.page += 1;
     if (totalPage < params.page) {
-       btnLoadMore.classList.add("pasif");
+      btnLoadMore.classList.add("pasif");
+      params.page = 1;
         throw new Error(
           "We're sorry, but you've reached the end of search results"
-        );
-      }
+      );
+      
+    }
+    if (document.querySelector('.card')) {
+      window.scrollBy(0, 2 * cardHeight());
+    }
     
-   window.scrollBy(0, 2 * cardHeight());
+   
     
   } catch (error) {
     iziToast.info({
